@@ -1,0 +1,15 @@
+{
+  "name": "team-profile-generator",
+  "version": "1.0.0",
+  "description": "EDxBootcamp challenge - app that takes in information about employees, then generate a webpage that displays summaries for each person.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
