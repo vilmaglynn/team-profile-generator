@@ -16,6 +16,3 @@ class Engineer extends Employee {
     return Engineer;
   }
 }
-
-const rectangle = new Rectangle(12, 9);
-rectangle.printInfo();
