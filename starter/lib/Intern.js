@@ -9,10 +9,11 @@ class Intern extends Employee {
     this.school = school;
   }
 
-  getSchool() {}
+  getSchool() {
+    return this.school;
+  }
 
   getRole() {
-    super.getRole();
-    return Intern;
+    return "Intern";
   }
 }

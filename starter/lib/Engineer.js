@@ -4,15 +4,22 @@ const Employee = require("./Employee");
 
 class Engineer extends Employee {
   constructor(id, name, email, github) {
-    // super is calling the superclass constructor with optional arguments
+    // Call the superclass constructor with necessary arguments
     super(id, name, email);
+    // Initialize Engineer-specific property
     this.github = github;
   }
 
-  getGithub() {}
+  // Method to get engineer's GitHub username
+  getGithub() {
+    return this.github;
+  }
 
+  // Method to get engineer's role
   getRole() {
-    super.getRole();
-    return Engineer;
+    // Return the role of Engineer
+    return "Engineer";
   }
 }
+
+module.exports = Engineer;

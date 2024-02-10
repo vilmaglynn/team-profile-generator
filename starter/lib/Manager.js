@@ -10,7 +10,6 @@ class Manager extends Employee {
   }
 
   getRole() {
-    super.getRole();
-    return Manager;
+    return "Manager";
   }
 }
