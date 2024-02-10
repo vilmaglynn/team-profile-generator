@@ -1,173 +1,168 @@
-//what is this user for???
-const path = require("path");
-
-// TODO: Write Code to gather information about the development team members, and render the HTML file.
+const Manager = require("./lib/Manager.js");
+const Engineer = require("./lib/Engineer.js");
+const Intern = require("./lib/Intern.js");
 const inquirer = require("inquirer");
-const Manager = require("./lib/Manager");
-const Engineer = require("./lib/Engineer");
-const Intern = require("./lib/Intern");
 const render = require("./src/page-template.js");
+const path = require("path");
 const fs = require("fs");
+
+// const fileURLToPath = require("url");
+// const dirname = require("path");
+
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
-// Array to store team members
+// TODO: Write Code to gather information about the development team members, and render the HTML file.
 const teamMembers = [];
 
-// Function to prompt user for team manager information
-async function promptManager() {
-  const managerQuestions = [
-    {
-      type: "input",
-      name: "name",
-      message: "Enter the team manager's name:",
-      validate: (input) => !!input.trim(), // Validate input to ensure it's not empty
-    },
-    {
-      type: "input",
-      name: "id",
-      message: "Enter the team manager's employee ID:",
-      validate: (input) => !!input.trim(), // Validate input to ensure it's not empty
-    },
-    {
-      type: "input",
-      name: "email",
-      message: "Enter the team manager's email address:",
-      validate: (input) => !!input.trim(), // Validate input to ensure it's not empty
-    },
-    {
-      type: "input",
-      name: "officeNumber",
-      message: "Enter the team manager's office number:",
-      validate: (input) => !!input.trim(), // Validate input to ensure it's not empty
-    },
-  ];
-
-  // Prompt user for manager information
-  const answers = await inquirer.prompt(managerQuestions);
-  const manager = new Manager(
-    answers.id,
-    answers.name,
-    answers.email,
-    answers.officeNumber
-  );
-  teamMembers.push(manager);
-
-  // Continue adding team members
-  await promptTeamMembers();
+function promptManager() {
+  // Inquirer prompt for manager details
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "Enter the manager's name:",
+      },
+      {
+        type: "input",
+        name: "id",
+        message: "Enter the manager's ID:",
+      },
+      {
+        type: "input",
+        name: "email",
+        message: "Enter the manager's email:",
+      },
+      {
+        type: "input",
+        name: "officeNumber",
+        message: "Enter the manager's office number:",
+      },
+    ])
+    .then((managerData) => {
+      const manager = new Manager(
+        managerData.name,
+        managerData.id,
+        managerData.email,
+        managerData.officeNumber
+      );
+      teamMembers.push(manager);
+      promptUser(); // Call the next prompt function (promptUser, which will be defined later)
+    });
 }
 
-// Function to prompt user for team member information
-async function promptTeamMembers() {
-  const menuQuestion = {
-    type: "list",
-    name: "choice",
-    message: "What would you like to do?",
-    choices: ["Add an engineer", "Add an intern", "Finish building the team"],
-  };
-
-  const { choice } = await inquirer.prompt(menuQuestion);
-
-  if (choice === "Add an engineer") {
-    await promptEngineer();
-  } else if (choice === "Add an intern") {
-    await promptIntern();
-  } else {
-    generateHTML();
-  }
+function promptUser() {
+  // Inquirer prompt for user choice (add engineer, add intern, finish)
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "choice",
+        message: "Would you like to add another employee?",
+        choices: [
+          "Add an Engineer",
+          "Add an Intern",
+          "Finish building the team",
+        ],
+      },
+    ])
+    .then((userChoice) => {
+      if (userChoice.choice === "Add an Engineer") {
+        promptEngineer();
+      } else if (userChoice.choice === "Add an Intern") {
+        promptIntern();
+      } else {
+        // Finish building the team
+        generateHTML();
+      }
+    });
 }
 
-// Function to prompt user for engineer information
-async function promptEngineer() {
-  const engineerQuestions = [
-    {
-      type: "input",
-      name: "name",
-      message: "Enter the engineer's name:",
-      validate: (input) => !!input.trim(), // Validate input to ensure it's not empty
-    },
-    {
-      type: "input",
-      name: "id",
-      message: "Enter the engineer's employee ID:",
-      validate: (input) => !!input.trim(), // Validate input to ensure it's not empty
-    },
-    {
-      type: "input",
-      name: "email",
-      message: "Enter the engineer's email address:",
-      validate: (input) => !!input.trim(), // Validate input to ensure it's not empty
-    },
-    {
-      type: "input",
-      name: "github",
-      message: "Enter the engineer's GitHub username:",
-      validate: (input) => !!input.trim(), // Validate input to ensure it's not empty
-    },
-  ];
-
-  const answers = await inquirer.prompt(engineerQuestions);
-  const engineer = new Engineer(
-    answers.id,
-    answers.name,
-    answers.email,
-    answers.github
-  );
-  teamMembers.push(engineer);
-  await promptTeamMembers();
+function promptEngineer() {
+  // Inquirer prompt for engineer details
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "Enter the engineer's name:",
+      },
+      {
+        type: "input",
+        name: "id",
+        message: "Enter the engineer's ID:",
+      },
+      {
+        type: "input",
+        name: "email",
+        message: "Enter the engineer's email:",
+      },
+      {
+        type: "input",
+        name: "github",
+        message: "Enter the engineers's github:",
+      },
+    ])
+    .then((engineerData) => {
+      const engineer = new Engineer(
+        engineerData.name,
+        engineerData.id,
+        engineerData.email,
+        engineerData.github
+      );
+      teamMembers.push(engineer);
+      promptUser();
+    });
 }
 
-// Function to prompt user for intern information
-async function promptIntern() {
-  const internQuestions = [
-    {
-      type: "input",
-      name: "name",
-      message: "Enter the intern's name:",
-      validate: (input) => !!input.trim(), // Validate input to ensure it's not empty
-    },
-    {
-      type: "input",
-      name: "id",
-      message: "Enter the intern's employee ID:",
-      validate: (input) => !!input.trim(), // Validate input to ensure it's not empty
-    },
-    {
-      type: "input",
-      name: "email",
-      message: "Enter the intern's email address:",
-      validate: (input) => !!input.trim(), // Validate input to ensure it's not empty
-    },
-    {
-      type: "input",
-      name: "school",
-      message: "Enter the intern's school:",
-      validate: (input) => !!input.trim(), // Validate input to ensure it's not empty
-    },
-  ];
-
-  const answers = await inquirer.prompt(internQuestions);
-  const intern = new Intern(
-    answers.id,
-    answers.name,
-    answers.email,
-    answers.school
-  );
-  teamMembers.push(intern);
-  await promptTeamMembers();
+function promptIntern() {
+  // Inquirer prompt for intern details
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "Enter the intern's name:",
+      },
+      {
+        type: "input",
+        name: "id",
+        message: "Enter the intern's ID:",
+      },
+      {
+        type: "input",
+        name: "email",
+        message: "Enter the intern's email:",
+      },
+      {
+        type: "input",
+        name: "school",
+        message: "Enter the intern's school:",
+      },
+    ])
+    .then((internData) => {
+      const intern = new Intern(
+        internData.name,
+        internData.id,
+        internData.email,
+        internData.school
+      );
+      teamMembers.push(intern);
+      promptUser();
+    });
 }
 
-// Function to generate HTML content and write it to a file
 function generateHTML() {
-  const htmlContent = render(teamMembers);
-  fs.writeFile(outputPath, htmlContent, (err) => {
+  const html = render(teamMembers);
+  fs.writeFile(outputPath, html, (err) => {
     if (err) {
-      console.error("Error writing HTML file:", err);
+      console.error("Error generating HTML", err);
     } else {
-      console.log("HTML file generated successfully:", outputPath);
+      console.log("Team HTML generated successfully!");
     }
   });
 }
 
-// Start the application by prompting for the team manager's information
+// Start the application by prompting for the manager's details
 promptManager();
