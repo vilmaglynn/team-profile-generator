@@ -8,6 +8,10 @@ EDxBootcamp challenge - app that takes in information about employees, then gene
 
 This application will take in information about employees on a software engineering team, then generates an HTML webpage that displays summaries for each person
 
+## Usage
+
+![Screenshot1](./assets/images/Screenshot.png)
+
 ## Instructions
 
 * Create a command-line application that accepts accepts user input using the provided starter code.
@@ -61,11 +65,6 @@ This application will take in information about employees on a software engineer
     * You can use the provided variable `outputPath` to target this location.
 
 ---
-
-## Screenshots
-
-Here are the screenshots of the deployed application:
-![Screenshot1](./assets/images/Screenshot.png)
 
 ## Technologies
 
